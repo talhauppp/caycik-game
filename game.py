@@ -3925,19 +3925,24 @@ class Game:
     # --------------------------------------------------------------- döngü
     def loop(s):
         now = time.perf_counter()
-        s.acc += min(now - s.last, 0.1)
+        dt = min(now - s.last, 0.1)
+        s.acc += dt
         s.last = now
+        s.render_acc = getattr(s, "render_acc", 0.0) + dt
         n = 0
         try:
+            # Keep gameplay simulation at 60 Hz, but render at a lighter 30 Hz.
             while s.acc >= 1 / 60.0 and n < 4:
                 s.acc -= 1 / 60.0
                 s.update()
                 n += 1
                 if s.quit:
                     return
-            if n:
+            if n and s.render_acc >= 1 / 30.0:
+                s.render_acc %= (1 / 30.0)
                 s.draw()
-            s.root.after(6, s.loop)
+            # Avoid waking the Python runtime every 6 ms on mobile devices.
+            s.root.after(16, s.loop)
         except tk.TclError:
             return
 
