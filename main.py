@@ -6,6 +6,7 @@ import struct
 import json
 import os
 import sys
+import asyncio
 
 import pygame
 
@@ -70,11 +71,11 @@ def star_pts(cx, cy, r1, r2, n, rot):
 
 DIFF = [
     dict(name="KOLAY", hp=5, bhp=0.7, bt=0.82, shot=0.9, cap=79, col="#6fd04a",
-         info="KOLAY: 5 can · boss %30 daha zayıf ve yavaş · en yüksek not B"),
+         info="KOLAY: 5 can  boss %30 daha zayif ve yavas  en yuksek not B"),
     dict(name="NORMAL", hp=3, bhp=1.0, bt=1.0, shot=1.0, col=GOLD,
-         info="NORMAL: 3 can · standart savaş"),
+         info="NORMAL: 3 can  standart savas"),
     dict(name="ZOR", hp=2, bhp=1.3, bt=1.15, shot=1.1, bonus=5, col="#ff5a4a",
-         info="ZOR: 2 can · boss %30 daha dayanıklı ve hızlı · +5 puan"),
+         info="ZOR: 2 can  boss %30 daha dayanikli ve hizli  +5 puan"),
 ]
 
 # ----------------------------------------------------------------- Sound Synth
@@ -407,7 +408,7 @@ class BaseBoss:
         self.flash = 2
 
 class Frog(BaseBoss):
-    name = "KURBAĞA KRAL"
+    name = "KURBAGA KRAL"
     maxhp = 250
 
     def __init__(self, g):
@@ -582,7 +583,7 @@ class Frog(BaseBoss):
             g.ren.ov(x + wx, y + wy * sq, 6, 5, dk, 2)
 
 class Mage(BaseBoss):
-    name = "SİHİRBAZ TAVŞAN"
+    name = "SIHIRBAZ TAVSAN"
     maxhp = 320
 
     def __init__(self, g):
@@ -768,7 +769,7 @@ class Mage(BaseBoss):
             g.ren.ln([(x + d * 10, y + 8), (x + d * 38, y + 12)], 2, INK)
 
 class Clock(BaseBoss):
-    name = "ZAMAN EFENDİSİ"
+    name = "ZAMAN EFENDISI"
     maxhp = 420
     cx = 745.0
     cy = 225.0
@@ -965,12 +966,12 @@ class Clock(BaseBoss):
 
 # ----------------------------------------------------------------- Levels
 LEVELS = [
-    dict(name="KURBAĞA KRAL", sub="Bataklıkta Kavga", cls=Frog, theme="swamp",
+    dict(name="KURBAGA KRAL", sub="Bataklikta Kavga", cls=Frog, theme="swamp",
          sky=("#fbe08a", "#f08f45"), ray="#fff0b0", ground="#6f9a3a", plats=[], par=75, stars=1),
-    dict(name="SİHİRBAZ TAVŞAN", sub="Şapkadan Çıkan Bela", cls=Mage, theme="stage",
+    dict(name="SIHIRBAZ TAVSAN", sub="Sapkadan Cikan Bela", cls=Mage, theme="stage",
          sky=("#4b2a7a", "#c25a8a"), ray="#7a4aa8", ground="#8a4a2a",
          plats=[(120, 300, 350), (660, 840, 350)], par=95, stars=2),
-    dict(name="ZAMAN EFENDİSİ", sub="Vakit Daralıyor", cls=Clock, theme="tower",
+    dict(name="ZAMAN EFENDISI", sub="Vakit Daraliyor", cls=Clock, theme="tower",
          sky=("#17424a", "#3e8a7a"), ray="#2c6a68", ground="#5a4a3a",
          plats=[(90, 250, 360), (400, 560, 305)], par=120, stars=3),
 ]
@@ -978,27 +979,27 @@ MENU_CFG = dict(theme="menu", sky=("#f7d77a", "#ee9446"), ray="#ffe9a0", ground=
 GRADE_RANK = {"": 0, "D": 1, "C": 2, "B": 3, "A": 4, "S": 5}
 
 HOWTO = [
-    "Her bölümde dev bir boss ile savaşırsın. Dikkatli ol, canın sınırlı!",
+    "Her bolumde dev bir boss ile savasirsin. Dikkatli ol, canin sinirli!",
     "",
-    "DOKUNMATİK KONTROLLER (Ekranda):",
-    "Sol D-Pad / Butonlar : Sola, Sağa koş ve Yukarı nişan al",
-    "[A] Zıpla / PARRY     [B] Ateş (Basılı tut)",
-    "[DASH] Hızlı Atılma    [EX] Güçlü Özel Atış (1 Kart)",
+    "DOKUNMATIK KONTROLLER (Ekranda):",
+    "Sol D-Pad / Butonlar : Sola, Saga kos ve Yukari nisan al",
+    "[A] Zipla / PARRY     [B] Ates (Basili tut)",
+    "[DASH] Hizli Atilma    [EX] Guclu Ozel Atis (1 Kart)",
     "",
-    "KLAVYE DESTEĞİ:",
-    "A/D veya Sol/Sağ: Koş   |   Space / Z: Zıpla",
-    "X / J: Ateş             |   Shift / C: Dash    |   Q / E: EX",
+    "KLAVYE DESTEGI:",
+    "A/D veya Sol/Sag: Kos   |   Space / Z: Zipla",
+    "X / J: Ates             |   Shift / C: Dash    |   Q / E: EX",
     "",
-    "PARRY: Havadayken PEMBE bir nesneye tekrar zıpla!",
-    "Her parry sana 1 EX kartı kazandırır.",
-    "Hızlı bitir, az hasar al, çok parry yap = daha yüksek not!",
+    "PARRY: Havadayken PEMBE bir nesneye tekrar zipla!",
+    "Her parry sana 1 EX karti kazandirir.",
+    "Hizli bitir, az hasar al, cok parry yap = daha yuksek not!",
 ]
 
 # ----------------------------------------------------------------- Main Game Engine
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("ÇAYCIK: Boss Savaşı (Mobile)")
+        pygame.display.set_caption("CAYCIK: Boss Savasi (Mobile)")
 
         # Fullscreen / Scaled Display Setup
         self.logical_surf = pygame.Surface((W, H))
@@ -1208,7 +1209,7 @@ class Game:
         self.sfx.play("hurt")
         if p.hp <= 0:
             self.dying = 1
-            self.pop(p.x, p.y - 80, "ÖLDÜN!", RED)
+            self.pop(p.x, p.y - 80, "OLDUN!", RED)
         return True
 
     # ------------------------------------------------------------- Update
@@ -1270,7 +1271,7 @@ class Game:
         self.pressed_actions.clear()
 
     def upd_menu(self):
-        n = 4 # Başla, Bölüm Seç, Nasıl Oynanır, Çıkış
+        n = 4 # Basla, Bolum Sec, Nasil Oynanir, Cikis
         if self.actp("up"):
             self.sel = (self.sel - 1) % n
             self.sfx.play("blip")
@@ -1712,9 +1713,9 @@ class Game:
             pygame.draw.ellipse(alpha_surf, border_col, rect, 3)
 
             labels = {
-                "left": "◀", "right": "▶", "up": "▲",
+                "left": "", "right": "", "up": "",
                 "jump": "A", "shoot": "B", "dash": "DASH", "ex": "EX",
-                "pause": "❚❚"
+                "pause": ""
             }
             lbl = labels.get(name, "")
             font = self.ren.get_font(18 if len(lbl) <= 2 else 12)
@@ -1733,7 +1734,7 @@ class Game:
                 yy = H / 2 - 30 - max(0, self.intro - 110) * 8
                 self.ren.tx(W / 2, yy, "HAZIR MISIN?", 56, CREAM, ow=4)
             else:
-                self.ren.tx(W / 2, H / 2 - 30, "DÖVÜŞ!", 90 - int((60 - self.intro) * 0.5), GOLD, ow=4)
+                self.ren.tx(W / 2, H / 2 - 30, "DOVUS!", 90 - int((60 - self.intro) * 0.5), GOLD, ow=4)
 
     def draw(self):
         st = self.state
@@ -1772,7 +1773,7 @@ class Game:
             if self.state == "pause":
                 self.ren.panel(300, 120, 660, 420)
                 self.ren.tx(480, 165, "DURAKLATILDI", 26, INK, ow=0)
-                for i, lab in enumerate(("DEVAM", "YENİDEN BAŞLA", "ANA MENÜ")):
+                for i, lab in enumerate(("DEVAM", "YENIDEN BASLA", "ANA MENU")):
                     y = 235 + i * 54
                     if i == self.psel:
                         self.ren.rc(330, y - 20, 630, y + 20, GOLD, 3)
@@ -1783,12 +1784,12 @@ class Game:
             self.p.face = 1
             self.draw_player(self.p)
             bob = math.sin(self.t * 0.06) * 5
-            self.ren.tx(W / 2 + 5, 98 + bob + 5, "ÇAYCIK", 84, RED, ow=0, out=INK)
-            self.ren.tx(W / 2, 98 + bob, "ÇAYCIK", 84, CREAM, ow=4)
+            self.ren.tx(W / 2 + 5, 98 + bob + 5, "CAYCIK", 84, RED, ow=0, out=INK)
+            self.ren.tx(W / 2, 98 + bob, "CAYCIK", 84, CREAM, ow=4)
             self.ren.pl([(W / 2 - 150, 150), (W / 2 + 150, 150), (W / 2 + 170, 172), (W / 2 + 150, 194),
                          (W / 2 - 150, 194), (W / 2 - 170, 172)], GOLD, 4)
-            self.ren.tx(W / 2, 172, "BOSS SAVAŞI", 22, INK, ow=0)
-            for i, lab in enumerate(("BAŞLA", "BÖLÜM SEÇ", "NASIL OYNANIR", "ÇIKIŞ")):
+            self.ren.tx(W / 2, 172, "BOSS SAVASI", 22, INK, ow=0)
+            for i, lab in enumerate(("BASLA", "BOLUM SEC", "NASIL OYNANIR", "CIKIS")):
                 y = 246 + i * 50
                 if i == self.sel:
                     self.ren.rc(W / 2 - 150, y - 22, W / 2 + 150, y + 22, GOLD, 4)
@@ -1798,7 +1799,7 @@ class Game:
                     self.ren.tx(W / 2, y, lab, 22, CREAM, ow=3)
         elif st == "select":
             self.draw_bg(MENU_CFG)
-            self.ren.tx(W / 2, 52, "BÖLÜM SEÇ", 36, CREAM, ow=4)
+            self.ren.tx(W / 2, 52, "BOLUM SEC", 36, CREAM, ow=4)
             for i, lv in enumerate(LEVELS):
                 x1 = 50 + i * 290
                 y1 = 100 + (-14 if i == self.lsel else 0)
@@ -1813,14 +1814,14 @@ class Game:
                 cx = (x1 + x2) / 2
                 if lock:
                     self.ren.rc(cx - 22, y1 + 66, cx + 22, y1 + 108, "#555555", 3)
-                    self.ren.tx(cx, y1 + 170, "KİLİTLİ", 22, INK, ow=0)
+                    self.ren.tx(cx, y1 + 170, "KILITLI", 22, INK, ow=0)
                 else:
                     self.ren.tx(cx, y1 + 72, str(i + 1), 64, CREAM, ow=4)
                     self.ren.tx(cx, y1 + 160, lv["name"], 18, INK, ow=0)
                     self.ren.tx(cx, y1 + 188, lv["sub"], 13, RED, ow=0)
-                    self.ren.tx(cx, y1 + 222, "★" * lv["stars"] + "☆" * (3 - lv["stars"]), 22, "#d29a1a", ow=0)
+                    self.ren.tx(cx, y1 + 222, "" * lv["stars"] + "" * (3 - lv["stars"]), 22, "#d29a1a", ow=0)
                     dd = DIFF[clamp(self.settings["diff"][i], 0, 2)]
-                    self.ren.tx(cx, y1 + 254, ("◄ %s ►" % dd["name"]) if i == self.lsel else dd["name"], 15, dd["col"], ow=2)
+                    self.ren.tx(cx, y1 + 254, (" %s " % dd["name"]) if i == self.lsel else dd["name"], 15, dd["col"], ow=2)
                     g = self.save["grades"].get(str(i))
                     if g:
                         self.ren.ov(cx, y1 + 305, 28, 28, GOLD, 4)
@@ -1831,13 +1832,13 @@ class Game:
             self.ren.tx(W / 2, 85, "NASIL OYNANIR", 30, INK, ow=0)
             for i, t in enumerate(HOWTO):
                 self.ren.tx(135, 125 + i * 26, t, 13, INK, "w", 0)
-            self.ren.tx(W / 2, 470, "Dokun veya Zıpla tuşuna bas: Geri", 14, RED, ow=0)
+            self.ren.tx(W / 2, 470, "Dokun veya Zipla tusuna bas: Geri", 14, RED, ow=0)
         elif st == "result":
             self.draw_bg(MENU_CFG)
             r = self.res
             self.ren.panel(190, 50, 770, 490)
-            self.ren.tx(W / 2, 100, "SONUÇ", 38, INK, ow=0)
-            lines = [("Süre", "%d:%04.1f" % (int(r["time"] // 60), r["time"] % 60)),
+            self.ren.tx(W / 2, 100, "SONUC", 38, INK, ow=0)
+            lines = [("Sure", "%d:%04.1f" % (int(r["time"] // 60), r["time"] % 60)),
                      ("Kalan can", "%d / %d" % (r["hp"], r["maxhp"])),
                      ("Parry", str(r["parries"])),
                      ("Zorluk", r["diff"])]
@@ -1851,28 +1852,28 @@ class Game:
                 self.ren.ov(W / 2, 395, 54, 54, GOLD, 5)
                 self.ren.tx(W / 2, 395, r["grade"], 64, INK, ow=0)
             if self.rt > 80 and (self.t // 25) % 2 == 0:
-                txt = "Dokun: Sonraki Bölüm" if self.lv + 1 < len(LEVELS) else "Dokun: Devam"
+                txt = "Dokun: Sonraki Bolum" if self.lv + 1 < len(LEVELS) else "Dokun: Devam"
                 self.ren.tx(W / 2, 470, txt, 17, RED, ow=0)
         elif st == "dead":
             self.draw_bg(MENU_CFG)
             b = self.boss
             self.ren.panel(200, 80, 760, 460)
-            self.ren.tx(W / 2, 135, "ÖLDÜN!", 50, RED, ow=0)
+            self.ren.tx(W / 2, 135, "OLDUN!", 50, RED, ow=0)
             self.ren.tx(W / 2, 200, b.name if b else "", 20, INK, ow=0)
             frac = clamp(b.hp / b.maxhp, 0, 1) if b else 0
             self.ren.rc(260, 230, 700, 256, "#5a2a1a", 3)
             self.ren.rc(262, 232, 262 + 436 * frac, 254, RED, 0, "")
-            self.ren.tx(W / 2, 285, "Boss Kalan Canı: %%%d" % int(frac * 100), 15, INK, ow=0)
-            for i, lab in enumerate(("TEKRAR DENE", "ANA MENÜ")):
+            self.ren.tx(W / 2, 285, "Boss Kalan Cani: %%%d" % int(frac * 100), 15, INK, ow=0)
+            for i, lab in enumerate(("TEKRAR DENE", "ANA MENU")):
                 y = 345 + i * 50
                 if i == self.dsel:
                     self.ren.rc(300, y - 20, 660, y + 20, GOLD, 3)
                 self.ren.tx(W / 2, y, lab, 20, INK, ow=0)
         elif st == "ending":
             self.draw_bg(MENU_CFG)
-            self.ren.tx(W / 2, 150, "TEBRİKLER!", 70, CREAM, ow=5)
-            self.ren.tx(W / 2, 235, "Tüm bosslar yenildi.", 24, GOLD, ow=3)
-            self.ren.tx(W / 2, 285, "Bardak artık huzur içinde çayını yudumlayabilir.", 18, CREAM, ow=2)
+            self.ren.tx(W / 2, 150, "TEBRIKLER!", 70, CREAM, ow=5)
+            self.ren.tx(W / 2, 235, "Tum bosslar yenildi.", 24, GOLD, ow=3)
+            self.ren.tx(W / 2, 285, "Bardak artik huzur icinde cayini yudumlayabilir.", 18, CREAM, ow=2)
             self.p.x, self.p.face = W / 2, 1
             self.p.y = GROUND
             self.p.hp = 3
@@ -1880,7 +1881,7 @@ class Game:
             for px, py, vx, vy, l, ml, col, sz, k in self.parts:
                 self.ren.ov(px, py, sz, sz, col, 0, "")
             if self.rt > 90 and (self.t // 25) % 2 == 0:
-                self.ren.tx(W / 2, 400, "Dokun: Ana Menü", 18, CREAM, ow=3)
+                self.ren.tx(W / 2, 400, "Dokun: Ana Menu", 18, CREAM, ow=3)
 
         # Draw On-screen touch buttons for mobile play
         self.draw_touch_controls()
@@ -1905,7 +1906,7 @@ class Game:
                 self.ren.ov(cx, cy, r + 40, r + 40, "", 80, INK)
 
     # ------------------------------------------------------------- Main Loop
-    def run(self):
+    async def run(self):
         while not self.quit:
             # Handle Window / Screen scaling
             sw, sh = self.screen.get_size()
@@ -1998,11 +1999,15 @@ class Game:
             scaled_surf = pygame.transform.smoothscale(self.logical_surf, (sw, sh))
             self.screen.blit(scaled_surf, (0, 0))
             pygame.display.flip()
+            await asyncio.sleep(0)
             self.clock.tick(60)
 
         pygame.quit()
         sys.exit()
 
-if __name__ == "__main__":
+async def main():
     game = Game()
-    game.run()
+    await game.run()
+
+if __name__ == "__main__":
+    asyncio.run(main())
