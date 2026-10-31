@@ -15,20 +15,30 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090704;col
 #loading strong{font-family:Georgia,serif;font-size:clamp(24px,5vw,42px);color:#f2b632}
 #loading small{opacity:.75}#bar{width:min(300px,70vw);height:7px;background:#49351e;border-radius:9px;overflow:hidden}#bar i{display:block;width:10%;height:100%;background:#f2b632;transition:width .2s}
 #error{position:absolute;left:12px;right:12px;top:12px;color:#ff9c86;font-size:13px;z-index:20;white-space:pre-wrap;pointer-events:none}
-#mobile-controls{display:none;position:absolute;inset:0;pointer-events:none;z-index:5}
-.control-cluster{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));display:grid;gap:8px;pointer-events:auto;touch-action:none}
-#movement{left:max(12px,env(safe-area-inset-left));grid-template-columns:repeat(3,clamp(42px,8vw,68px));grid-template-rows:repeat(2,clamp(42px,8vw,68px));align-items:center}
-#actions{right:max(12px,env(safe-area-inset-right));grid-template-columns:repeat(3,clamp(48px,8.5vw,72px));grid-template-rows:repeat(2,clamp(48px,8.5vw,72px));align-items:center}
-.ctrl{border:1px solid #f7e8c088;border-radius:15px;background:linear-gradient(145deg,#594025dd,#24170fee);color:#fff4d7;font-weight:900;font-size:clamp(12px,2.2vw,17px);box-shadow:0 4px 0 #100a05,0 5px 14px #0008;display:flex;align-items:center;justify-content:center;user-select:none;touch-action:none;min-width:0;min-height:0}
-.ctrl:active,.ctrl.down{background:linear-gradient(145deg,#a16d2f,#4a2d12);transform:translateY(2px);box-shadow:0 2px 0 #100a05}
-#movement [data-key="up"]{grid-column:2;grid-row:1}#movement [data-key="left"]{grid-column:1;grid-row:2}#movement [data-key="down"]{grid-column:2;grid-row:2}#movement [data-key="right"]{grid-column:3;grid-row:2}
-#actions [data-key="x"]{grid-column:2;grid-row:1;background:linear-gradient(145deg,#7c3424dd,#35130fee)}#actions [data-key="space"]{grid-column:1;grid-row:1}#actions [data-key="shift_l"]{grid-column:3;grid-row:1}#actions [data-key="q"]{grid-column:1;grid-row:2}#actions [data-key="r"]{grid-column:2;grid-row:2}#actions [data-key="tab"]{grid-column:3;grid-row:2}
-#mobile-hint{position:absolute;top:max(7px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);font-size:10px;color:#f7e8c099;text-shadow:0 1px 3px #000;white-space:nowrap;pointer-events:none}
+#mobile-controls{display:none;position:absolute;inset:0;pointer-events:none;z-index:5;--btn:clamp(54px,18vh,78px);--gap:clamp(4px,1.2vh,9px);--edge:clamp(8px,2.2vw,22px)}
+.control-cluster{position:absolute;bottom:max(var(--edge),env(safe-area-inset-bottom));display:grid;gap:var(--gap);pointer-events:auto;touch-action:none}
+#movement{left:max(var(--edge),env(safe-area-inset-left));grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(3,var(--btn));align-items:center}
+#actions{right:max(var(--edge),env(safe-area-inset-right));grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(2,var(--btn));align-items:center}
+.ctrl{position:relative;overflow:hidden;border:1.5px solid #ffffff75;border-radius:50%;background:radial-gradient(circle at 32% 25%,#ffffff42 0,#ffffff18 38%,#10182070 100%);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);color:#fff;font-weight:850;font-size:clamp(18px,5vh,27px);text-shadow:0 2px 5px #000;box-shadow:inset 0 1px 1px #ffffff55,0 3px 12px #0007;display:flex;align-items:center;justify-content:center;user-select:none;touch-action:none;min-width:0;min-height:0;padding:0}
+.ctrl::after{content:attr(data-label);position:absolute;bottom:7%;left:0;right:0;text-align:center;font-size:clamp(8px,1.8vh,11px);line-height:1;color:#fffde8;text-shadow:0 1px 3px #000;letter-spacing:.04em}
+.ctrl:active,.ctrl.down{background:radial-gradient(circle at 35% 25%,#ffffff65 0,#ffffff2b 45%,#243548aa 100%);border-color:#fff;transform:scale(.94);box-shadow:inset 0 1px 5px #0008,0 2px 7px #0008}
+#movement [data-key="up"]{grid-column:2;grid-row:1}#movement [data-key="left"]{grid-column:1;grid-row:2}#movement [data-key="down"]{grid-column:2;grid-row:3}#movement [data-key="right"]{grid-column:3;grid-row:2}
+#actions [data-key="x"]{grid-column:2;grid-row:1;background:radial-gradient(circle at 32% 25%,#ffb6a566,#a92b2470 55%,#36100d99)}
+#actions [data-key="space"]{grid-column:1;grid-row:1}
+#actions [data-key="shift_l"]{grid-column:3;grid-row:1}
+#actions [data-key="q"]{grid-column:1;grid-row:2}
+#actions [data-key="r"]{grid-column:2;grid-row:2}
+#actions [data-key="tab"]{grid-column:3;grid-row:2}
+#actions [data-key="escape"]{position:absolute;width:clamp(36px,10vh,48px);height:clamp(36px,10vh,48px);right:0;bottom:calc(var(--btn)*2 + var(--gap)*2 + 5px);font-size:16px}
+#actions [data-key="escape"]::after{font-size:7px;bottom:4%}
+#mobile-hint{position:absolute;top:max(7px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);font-size:clamp(9px,1.8vh,12px);color:#ffffffa8;text-shadow:0 1px 4px #000;white-space:nowrap;pointer-events:none;padding:4px 9px;border:1px solid #ffffff25;border-radius:20px;background:#0003;backdrop-filter:blur(4px)}
 #rotate{display:none;position:absolute;inset:0;z-index:9;background:#120c06ed;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:18px}
 #fullscreen{position:absolute;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:7;border:1px solid #f7e8c066;border-radius:8px;background:#21170dcc;color:#f7e8c0;padding:7px 10px;font-size:12px}
 @media (pointer:coarse){#mobile-controls{display:block}#fullscreen{display:none}}
 @media (pointer:coarse) and (orientation:portrait){#rotate{display:flex}}
 @media (pointer:coarse) and (orientation:landscape){#mobile-hint{display:block}}
+@media (max-height:360px) and (orientation:landscape){#mobile-controls{--btn:clamp(48px,16vh,62px);--gap:4px;--edge:7px}.ctrl::after{font-size:8px;bottom:5%}#actions [data-key="escape"]{width:34px;height:34px;bottom:calc(var(--btn)*2 + 13px)}}
+@media (min-width:900px) and (pointer:coarse){#mobile-controls{--btn:clamp(64px,15vh,88px);--edge:22px}}
 </style>
 </head>
 <body>
@@ -39,19 +49,19 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090704;col
   <div id="mobile-controls">
     <div id="mobile-hint">Telefonu yatay tut · Dokunmatik kontroller</div>
     <div id="movement" class="control-cluster">
-      <button class="ctrl" data-key="up" aria-label="Yukarı">▲</button>
-      <button class="ctrl" data-key="left" aria-label="Sol">◀</button>
-      <button class="ctrl" data-key="down" aria-label="Aşağı">▼</button>
-      <button class="ctrl" data-key="right" aria-label="Sağ">▶</button>
+      <button class="ctrl" data-key="up" data-label="YUKARI" aria-label="Yukarı">▲</button>
+      <button class="ctrl" data-key="left" data-label="SOL" aria-label="Sol">◀</button>
+      <button class="ctrl" data-key="down" data-label="AŞAĞI" aria-label="Aşağı">▼</button>
+      <button class="ctrl" data-key="right" data-label="SAĞ" aria-label="Sağ">▶</button>
     </div>
     <div id="actions" class="control-cluster">
-      <button class="ctrl" data-key="space">ZIPLA</button>
-      <button class="ctrl" data-key="x">ATEŞ</button>
-      <button class="ctrl" data-key="shift_l">DASH</button>
-      <button class="ctrl" data-key="q">EX</button>
-      <button class="ctrl" data-key="r">SİLAH</button>
-      <button class="ctrl" data-key="tab">SİLAH+</button>
-      <button class="ctrl" data-key="escape" style="grid-column:3;grid-row:3">DURAKLAT</button>
+      <button class="ctrl" data-key="space" data-label="ZIPLA" aria-label="Zıpla">⤒</button>
+      <button class="ctrl" data-key="x" data-label="ATEŞ" aria-label="Ateş">✦</button>
+      <button class="ctrl" data-key="shift_l" data-label="DASH" aria-label="Dash">➤</button>
+      <button class="ctrl" data-key="q" data-label="EX" aria-label="EX saldırısı">✹</button>
+      <button class="ctrl" data-key="r" data-label="SİLAH" aria-label="Silah değiştir">↻</button>
+      <button class="ctrl" data-key="tab" data-label="SONRAKİ" aria-label="Sonraki silah">»</button>
+      <button class="ctrl" data-key="escape" data-label="DURAKLAT" aria-label="Duraklat">Ⅱ</button>
     </div>
   </div>
   <div id="rotate">📱<br><br>Oyunu oynamak için telefonunu yatay çevir.</div>
