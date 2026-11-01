@@ -3928,20 +3928,18 @@ class Game:
         dt = min(now - s.last, 0.1)
         s.acc += dt
         s.last = now
-        s.render_acc = getattr(s, "render_acc", 0.0) + dt
         n = 0
         try:
-            # Keep gameplay simulation at 60 Hz, but render at a lighter 30 Hz.
+            # Keep both simulation and rendering on the 60 Hz game tick.
             while s.acc >= 1 / 60.0 and n < 4:
                 s.acc -= 1 / 60.0
                 s.update()
                 n += 1
                 if s.quit:
                     return
-            if n and s.render_acc >= 1 / 30.0:
-                s.render_acc %= (1 / 30.0)
+            if n:
                 s.draw()
-            # Avoid waking the Python runtime every 6 ms on mobile devices.
+            # Schedule close to 60 callbacks per second on supported devices.
             s.root.after(16, s.loop)
         except tk.TclError:
             return

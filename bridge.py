@@ -225,9 +225,11 @@ class RootAdapter:
         def run():
             self.timers.pop(ident, None)
             try:
-                # The game loop draws its own frame. Flushing here as well
-                # caused a second full-canvas redraw after every timer callback.
+                # Flush the canvas after each game-loop callback so the
+                # browser receives the frame drawn by the original game.
                 callback()
+                if self.canvas:
+                    self.canvas.flush()
             except Exception as exc:
                 document.getElementById('error').textContent = 'Oyun hatası: ' + str(exc)
                 raise
