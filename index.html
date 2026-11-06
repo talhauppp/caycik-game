@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1b1209">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1209'/%3E%3Cpath d='M14 23h36v8a18 18 0 0 1-36 0z' fill='%23f2b632' stroke='%23f7e8c0' stroke-width='2'/%3E%3Cpath d='M50 26h4a7 7 0 0 1 0 14h-6' fill='none' stroke='%23f7e8c0' stroke-width='4'/%3E%3Cpath d='M22 13c-5-5 5-6 0-11M33 13c-5-5 5-6 0-11' fill='none' stroke='%23f7e8c0' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>ÇAYCIK: BOSS SAVAŞI</title>
+<style>
+:root{color-scheme:dark;--cream:#f7e8c0;--ink:#1b1209;--gold:#f2b632}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090704;color:var(--cream);font-family:system-ui,sans-serif;touch-action:none;overscroll-behavior:none}
+#stage{position:relative;width:100vw;height:100dvh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#382716 0,#100b06 70%)}
+#game-canvas{display:block;width:min(100vw,177.7778dvh);height:min(100dvh,56.25vw);object-fit:fill;background:var(--ink);box-shadow:0 0 50px #000;touch-action:none}
+#loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:#1b1209;color:#f7e8c0;z-index:10;text-align:center;padding:24px}
+#loading strong{font-family:Georgia,serif;font-size:clamp(24px,5vw,42px);color:#f2b632}
+#loading small{opacity:.75}#bar{width:min(300px,70vw);height:7px;background:#49351e;border-radius:9px;overflow:hidden}#bar i{display:block;width:10%;height:100%;background:#f2b632;transition:width .2s}
+#error{position:absolute;left:12px;right:12px;top:12px;color:#ff9c86;font-size:13px;z-index:20;white-space:pre-wrap;pointer-events:none}
+#mobile-controls{display:none;position:absolute;inset:0;pointer-events:none;z-index:5;--btn:clamp(84px,23vh,116px);--gap:clamp(5px,1.5vh,10px);--edge:clamp(10px,2.5vw,26px)}
+.control-cluster{position:absolute;bottom:max(var(--edge),env(safe-area-inset-bottom));display:grid;gap:var(--gap);pointer-events:auto;touch-action:none}
+#movement{left:max(var(--edge),env(safe-area-inset-left));grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(3,var(--btn));align-items:center}
+#actions{right:max(var(--edge),env(safe-area-inset-right));grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(2,var(--btn));align-items:center}
+.ctrl{position:relative;display:flex;align-items:center;justify-content:center;width:var(--btn);height:var(--btn);min-width:var(--btn);min-height:var(--btn);padding:0;border:2px solid #ffffffa8;border-radius:50%;overflow:hidden;color:#fff;font-size:clamp(30px,8vh,44px);font-weight:900;line-height:1;text-shadow:0 2px 7px #000,0 0 14px #000;background:radial-gradient(circle at 32% 24%,#ffffff66 0%,#ffffff32 27%,#17212bc9 78%,#080d16e8 100%);backdrop-filter:blur(8px) saturate(135%);-webkit-backdrop-filter:blur(8px) saturate(135%);box-shadow:inset 0 2px 4px #ffffff75,inset 0 -5px 12px #0008,0 5px 18px #0009;user-select:none;touch-action:none;transition:transform .08s ease,border-color .08s ease,filter .08s ease}
+.ctrl::before{content:"";position:absolute;inset:6px;border:1px solid #ffffff35;border-radius:50%;pointer-events:none}
+.ctrl::after{content:attr(data-label);position:absolute;bottom:12%;left:2px;right:2px;text-align:center;font-size:clamp(11px,2.7vh,15px);line-height:1;font-weight:900;letter-spacing:.06em;color:#fff;text-shadow:0 2px 4px #000,0 0 6px #000}
+.ctrl:active,.ctrl.down{transform:scale(.93);filter:brightness(1.28);border-color:#fff;box-shadow:inset 0 3px 10px #0009,0 2px 8px #0009}
+#movement [data-key="up"]{grid-column:2;grid-row:1}#movement [data-key="left"]{grid-column:1;grid-row:2}#movement [data-key="down"]{grid-column:2;grid-row:3}#movement [data-key="right"]{grid-column:3;grid-row:2}
+#movement::before{content:"";position:absolute;left:calc(var(--btn) + var(--gap));top:calc(var(--btn) + var(--gap));width:var(--btn);height:var(--btn);border-radius:50%;background:radial-gradient(circle,#ffffff15,#080d1666 72%);border:2px solid #ffffff30;pointer-events:none;z-index:-1}
+#actions [data-key="x"]{grid-column:2;grid-row:1;background:radial-gradient(circle at 30% 22%,#ffd0c0a8,#e34a3dcc 48%,#67140fea 100%);border-color:#ffd6c8}
+#actions [data-key="space"]{grid-column:1;grid-row:1}
+#actions [data-key="shift_l"]{grid-column:3;grid-row:1;background:radial-gradient(circle at 30% 22%,#c7edffa8,#237cb9dc 48%,#102e56f0 100%);border-color:#c5e9ff}
+#actions [data-key="q"]{grid-column:1;grid-row:2;background:radial-gradient(circle at 30% 22%,#f4d5ffa8,#8745cbdc 48%,#35165ff0 100%);border-color:#ead0ff}
+#actions [data-key="r"]{grid-column:2;grid-row:2;background:radial-gradient(circle at 30% 22%,#fff2b0a8,#b17a19dc 48%,#49300bf0 100%);border-color:#ffedb0}
+#actions [data-key="tab"]{grid-column:3;grid-row:2}
+#actions [data-key="escape"]{position:absolute;right:0;bottom:calc(var(--btn)*2 + var(--gap)*2 + 8px);width:clamp(48px,13vh,60px);height:clamp(48px,13vh,60px);min-width:clamp(48px,13vh,60px);min-height:clamp(48px,13vh,60px);font-size:24px;background:#111b29bb}
+#actions [data-key="escape"]::after{font-size:9px;bottom:9%}
+#mobile-hint{position:absolute;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);font-size:clamp(10px,2vh,13px);font-weight:700;color:#fff;text-shadow:0 2px 5px #000;white-space:nowrap;pointer-events:none;padding:6px 13px;border:1px solid #ffffff45;border-radius:30px;background:#08111dcc;backdrop-filter:blur(8px)}
+#rotate{display:none;position:absolute;inset:0;z-index:9;background:#120c06ed;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:18px}
+#fullscreen{position:absolute;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:7;border:1px solid #f7e8c066;border-radius:8px;background:#21170dcc;color:#f7e8c0;padding:7px 10px;font-size:12px}
+#pad-status{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));z-index:8;padding:7px 11px;border:1px solid #f2b63266;border-radius:9px;background:#21170dcc;color:#f7e8c0;font:12px system-ui;pointer-events:none;max-width:48vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (pointer:coarse){#mobile-controls{display:block}#fullscreen{display:none}}
+@media (pointer:coarse) and (orientation:portrait){#rotate{display:flex}}
+@media (pointer:coarse) and (orientation:landscape){#mobile-hint{display:block}}
+@media (max-height:430px) and (orientation:landscape){#mobile-controls{--btn:clamp(68px,21vh,88px);--gap:clamp(4px,1vh,7px);--edge:clamp(7px,1.8vw,16px)}.ctrl{font-size:clamp(28px,7vh,38px)}.ctrl::after{font-size:clamp(10px,2.4vh,12px)}#actions [data-key="escape"]{width:44px;height:44px;min-width:44px;min-height:44px;bottom:calc(var(--btn)*2 + 12px)}}
+@media (max-height:340px) and (orientation:landscape){#mobile-controls{--btn:clamp(60px,19vh,70px);--gap:4px;--edge:6px}.ctrl::after{font-size:9px}#actions [data-key="escape"]{width:38px;height:38px;min-width:38px;min-height:38px;bottom:calc(var(--btn)*2 + 9px)}}
+@media (min-width:900px) and (pointer:coarse){#mobile-controls{--btn:clamp(100px,17vh,132px);--edge:26px}}
+/* Kolu bağlayınca yalnızca dokunmatik cihazlarda gizle; bağlantı kesilince geri göster. */
+@media (pointer:coarse){body.gamepad-active #mobile-controls{display:none!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game-canvas" width="960" height="540" aria-label="ÇAYCIK Boss Savaşı"></canvas>
+  <div id="loading"><strong>ÇAYCIK: BOSS SAVAŞI</strong><span id="status">Orijinal oyun yükleniyor…</span><div id="bar"><i id="progress"></i></div><small>İlk açılışta Python motoru indiriliyor. Biraz sürebilir.</small></div>
+  <div id="error"></div>
+  <div id="mobile-controls">
+    <div id="mobile-hint">Telefonu yatay tut · Dokunmatik kontroller</div>
+    <div id="movement" class="control-cluster">
+      <button class="ctrl" data-key="up" data-label="YUKARI" aria-label="Yukarı">⬆</button>
+      <button class="ctrl" data-key="left" data-label="SOL" aria-label="Sol">⬅</button>
+      <button class="ctrl" data-key="down" data-label="AŞAĞI" aria-label="Aşağı">⬇</button>
+      <button class="ctrl" data-key="right" data-label="SAĞ" aria-label="Sağ">➡</button>
+    </div>
+    <div id="actions" class="control-cluster">
+      <button class="ctrl" data-key="space" data-label="ZIPLA" aria-label="Zıpla">⬆</button>
+      <button class="ctrl" data-key="x" data-label="ATEŞ" aria-label="Ateş">✹</button>
+      <button class="ctrl" data-key="shift_l" data-label="DASH" aria-label="Dash">➜</button>
+      <button class="ctrl" data-key="q" data-label="EX" aria-label="EX saldırısı">✹</button>
+      <button class="ctrl" data-key="r" data-label="SİLAH" aria-label="Silah değiştir">↻</button>
+      <button class="ctrl" data-key="tab" data-label="SONRAKİ" aria-label="Sonraki silah">»</button>
+      <button class="ctrl" data-key="escape" data-label="DURAKLAT" aria-label="Duraklat">Ⅱ</button>
+    </div>
+  </div>
+  <div id="rotate">📱<br><br>Oyunu oynamak için telefonunu yatay çevir.</div>
+  <div id="pad-status" aria-live="polite">🎮 Oyun kolu bekleniyor</div>
+  <button id="fullscreen" type="button">⛶ Tam ekran</button>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let __audio=null,__music=null;
+function audioContext(){if(!__audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)__audio=new AC()}if(__audio?.state==='suspended')__audio.resume().catch(()=>{});return __audio}
+window.addEventListener('pointerdown',()=>audioContext(),{once:true});window.addEventListener('keydown',()=>audioContext(),{once:true});
+window.caycikStopMusic=()=>{if(__music){try{__music.stop()}catch(_){}__music=null}};
+window.caycikPlayMusic=samples=>{const c=audioContext();if(!c)return;window.caycikStopMusic();const data=Float32Array.from(samples);let peak=0;for(let i=0;i<data.length;i++)peak=Math.max(peak,Math.abs(data[i]));if(peak>0){const gain=.42/peak;for(let i=0;i<data.length;i++)data[i]*=gain}const b=c.createBuffer(1,data.length,22050);b.copyToChannel(data,0);const src=c.createBufferSource();src.buffer=b;src.loop=true;const g=c.createGain();g.gain.value=.45;src.connect(g).connect(c.destination);src.start();__music=src};
+window.caycikPlaySfx=key=>{const c=audioContext();if(!c)return;const now=c.currentTime;const tone=(type,f0,f1,dur,vol,delay=0)=>{const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f0,now+delay);o.frequency.linearRampToValueAtTime(Math.max(25,f1),now+delay+dur);g.gain.setValueAtTime(.0001,now+delay);g.gain.linearRampToValueAtTime(vol,now+delay+.008);g.gain.exponentialRampToValueAtTime(.0001,now+delay+dur);o.connect(g).connect(c.destination);o.start(now+delay);o.stop(now+delay+dur+.02)};const noise=(dur,vol,delay=0)=>{const n=Math.floor(c.sampleRate*dur),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource(),g=c.createGain();s.buffer=b;g.gain.setValueAtTime(vol,now+delay);g.gain.exponentialRampToValueAtTime(.0001,now+delay+dur);s.connect(g).connect(c.destination);s.start(now+delay)};switch(key){case'blip':tone('square',880,880,.04,.16);break;case'ok':tone('square',660,990,.1,.18);break;case'shoot':tone('square',1000,320,.05,.12);break;case'hit':noise(.05,.12);tone('triangle',260,120,.12,.18);break;case'hurt':tone('sawtooth',320,70,.32,.22);noise(.2,.12);break;case'parry':tone('sine',1200,2000,.15,.24);tone('sine',1800,2600,.15,.18,.05);break;case'dash':noise(.13,.14);tone('triangle',500,200,.1,.12);break;case'jump':tone('square',300,640,.1,.14);break;case'land':noise(.05,.1);tone('triangle',140,80,.1,.16);break;case'coin':tone('square',1320,1320,.06,.16);tone('square',1980,1980,.16,.16,.06);break;case'boom':noise(.35,.25);tone('triangle',140,40,.35,.22);break;case'ko':tone('sawtooth',420,60,.9,.25);noise(.6,.16);tone('triangle',200,40,.9,.22);break;case'go':tone('square',440,440,.09,.16);tone('square',554,554,.09,.16,.08);tone('square',660,660,.2,.16,.16);break;case'weapon':tone('square',700,700,.04,.14);tone('square',1000,1000,.06,.14,.05);break;default:break}};
+const keyMap={left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown',space:' ',shift_l:'Shift',q:'q',x:'x',r:'r',tab:'Tab',escape:'Escape'};
+window.caycikPress=(k,down)=>{const key=keyMap[k]||k;window.dispatchEvent(new KeyboardEvent(down?'keydown':'keyup',{key,bubbles:true,cancelable:true}));};
+
+// Xbox / PlayStation / standart HID oyun kolu desteği
+(()=>{
+ const indicator=$('pad-status');
+ const held=new Set();
+ let previous={};
+ const setKey=(name,down)=>{if(held.has(name)===down)return;if(down)held.add(name);else held.delete(name);window.caycikPress(name,down)};
+ const tap=(name)=>{window.caycikPress(name,true);setTimeout(()=>window.caycikPress(name,false),55)};
+ const pressed=(pad,i)=>!!pad.buttons[i]&&(pad.buttons[i].pressed||pad.buttons[i].value>0.55);
+ const edge=(name,value,fn)=>{if(value&&!previous[name])fn();previous[name]=value};
+ function poll(){
+  const pads=navigator.getGamepads?navigator.getGamepads():[];
+  const pad=Array.from(pads).find(p=>p&&p.connected);
+  if(!pad){document.body.classList.remove('gamepad-active');indicator.textContent='🎮 Oyun kolu bekleniyor';for(const k of [...held])setKey(k,false);previous={};requestAnimationFrame(poll);return}
+  document.body.classList.toggle('gamepad-active',window.matchMedia('(pointer: coarse)').matches);
+  indicator.textContent='🎮 Bağlı: '+pad.id.slice(0,42);
+  const ax=pad.axes[0]||0, ay=pad.axes[1]||0, dead=0.28;
+  setKey('left',ax < -dead||pressed(pad,14));
+  setKey('right',ax > dead||pressed(pad,15));
+  setKey('up',ay < -dead||pressed(pad,12));
+  setKey('down',ay > dead||pressed(pad,13));
+  setKey('space',pressed(pad,0));       // A / Cross: zıpla
+  let gameState='loading';
+  try { if (window.caycikGetGameState) gameState=window.caycikGetGameState(); } catch (_) {}
+  const bPressed=pressed(pad,1);
+  setKey('shift_l',bPressed && gameState==='fight'); // B / Circle: dash only in gameplay
+  edge('menu-back',bPressed && gameState!=='fight' && gameState!=='loading',()=>tap('escape'));
+  setKey('x',pressed(pad,2)||pressed(pad,7)); // X / Square veya RT: ateş
+  setKey('q',pressed(pad,3)||pressed(pad,6)); // Y / Triangle veya LT: EX
+  edge('weapon-prev',pressed(pad,4),()=>tap('r'));
+  edge('weapon-next',pressed(pad,5),()=>tap('tab'));
+  edge('pause',pressed(pad,9),()=>tap('escape'));
+  requestAnimationFrame(poll);
+ }
+ window.addEventListener('gamepadconnected',()=>{indicator.textContent='🎮 Oyun kolu bağlandı'});
+ window.addEventListener('gamepaddisconnected',()=>{indicator.textContent='🎮 Oyun kolu bekleniyor'});
+ requestAnimationFrame(poll);
+})();
+document.querySelectorAll('.ctrl').forEach(btn=>{
+  const k=btn.dataset.key;
+  const down=e=>{e.preventDefault();btn.classList.add('down');try{btn.setPointerCapture(e.pointerId)}catch(_){}window.caycikPress(k,true)};
+  const up=e=>{e.preventDefault();btn.classList.remove('down');window.caycikPress(k,false)};
+  btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up);btn.addEventListener('contextmenu',e=>e.preventDefault());
+});
+$('fullscreen').addEventListener('click',()=>{const el=$('stage');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()});
+(async()=>{
+ try{
+  $('status').textContent='Python motoru hazırlanıyor…';$('progress').style.width='20%';
+  const pyodide=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.27.7/full/'});
+  $('status').textContent='Orijinal oyun kodu yükleniyor…';$('progress').style.width='55%';
+  const [bridgeResp,gameResp]=await Promise.all([fetch('./bridge.py'),fetch('./game.py')]);
+  if(!bridgeResp.ok||!gameResp.ok)throw new Error('Oyun dosyaları bulunamadı. GitHub deposunda index.html, bridge.py ve game.py aynı klasörde olmalı.');
+  const bridge=await bridgeResp.text(),game=await gameResp.text();
+  await pyodide.runPythonAsync(bridge);
+  pyodide.globals.set('GAME_SOURCE',game);
+  $('status').textContent='Oyun başlatılıyor…';$('progress').style.width='85%';
+  await pyodide.runPythonAsync('game_instance = start_original_game(GAME_SOURCE)');
+  window.caycikGetGameState=()=>{try{return String(pyodide.globals.get('game_instance').state)}catch(_){return 'loading'}};
+  $('progress').style.width='100%';$('loading').style.display='none';
+  window.addEventListener('pagehide',()=>{try{pyodide.runPython('game_instance.root.destroy()')}catch(_){}});
+ }catch(err){$('status').textContent='Oyun başlatılamadı';$('error').textContent=String(err);$('progress').style.width='100%';console.error(err)}
+})();
+</script>
+</body>
+</html>
