@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Arkaplan -->
+  <rect width="512" height="512" fill="#1b1209" rx="80"/>
+
+  <!-- Çay bardağı gövdesi -->
+  <path d="M156 240 L180 380 Q256 420 332 380 L356 240 Z" fill="#f2b632" stroke="#1b1209" stroke-width="10"/>
+  <!-- Bardak üst kenar -->
+  <ellipse cx="256" cy="240" rx="100" ry="22" fill="#f7e8c0" stroke="#1b1209" stroke-width="8"/>
+  <!-- Çay yüzeyi (içi) -->
+  <ellipse cx="256" cy="242" rx="90" ry="18" fill="#c8372d" stroke="none"/>
+  <!-- Çay yüzey parlaklık -->
+  <ellipse cx="230" cy="238" rx="30" ry="6" fill="#ff7a6a" stroke="none" opacity="0.5"/>
+  
+  <!-- Tabak -->
+  <ellipse cx="256" cy="390" rx="130" ry="24" fill="#f2b632" stroke="#1b1209" stroke-width="8"/>
+  <ellipse cx="256" cy="390" rx="100" ry="14" fill="#f7e8c0" stroke="none"/>
+
+  <!-- Kulp -->
+  <path d="M356 275 Q420 275 420 320 Q420 365 356 365" fill="none" stroke="#f2b632" stroke-width="22" stroke-linecap="round"/>
+  <path d="M356 275 Q400 275 400 320 Q400 365 356 365" fill="none" stroke="#f7e8c0" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Buhar / ateş efekti -->
+  <!-- Ateş 1 -->
+  <path d="M210 230 Q195 190 215 155 Q220 180 235 160 Q230 200 250 190 Q240 160 260 130 Q270 165 260 195 Q280 170 275 145 Q295 175 280 220" fill="#c8372d" stroke="none" opacity="0.9"/>
+  <!-- Ateş 2 iç parlak -->
+  <path d="M225 220 Q218 195 230 172 Q234 188 242 175 Q238 198 252 192 Q246 172 256 152 Q263 172 256 194 Q268 177 265 160 Q278 182 268 212" fill="#f2b632" stroke="none" opacity="0.85"/>
+  <!-- Ateş çekirdek beyaz -->
+  <path d="M240 215 Q237 200 243 185 Q246 196 250 187 Q248 200 255 196 Q252 183 257 172 Q261 184 257 197 Q263 186 262 177 Q268 190 263 207" fill="#fffaf0" stroke="none" opacity="0.7"/>
+
+  <!-- Yıldızlar (boss teması) -->
+  <polygon points="80,80 88,104 114,104 93,120 101,144 80,128 59,144 67,120 46,104 72,104" fill="#f2b632" stroke="#1b1209" stroke-width="3"/>
+  <polygon points="432,80 438,96 456,96 441,107 447,124 432,113 417,124 423,107 408,96 426,96" fill="#f2b632" stroke="#1b1209" stroke-width="3"/>
+  <polygon points="80,420 86,436 104,436 89,447 95,464 80,453 65,464 71,447 56,436 74,436" fill="#c8372d" stroke="#1b1209" stroke-width="3"/>
+  <polygon points="432,420 438,436 456,436 441,447 447,464 432,453 417,464 423,447 408,436 426,436" fill="#c8372d" stroke="#1b1209" stroke-width="3"/>
+
+  <!-- Alt yazı -->
+  <text x="256" y="468" text-anchor="middle" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#f7e8c0" stroke="#1b1209" stroke-width="4" paint-order="stroke">ÇAYCIK</text>
+</svg>

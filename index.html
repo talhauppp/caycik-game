@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1b1209">
+  <title>ÇAYCIK: Boss Savaşı</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="canvas" width="960" height="540"></canvas>
+
+  <div id="mobile-controls">
+    <div id="ctrl-left">
+      <button id="btn-left"  class="dpad-btn" data-key="ArrowLeft">←</button>
+      <button id="btn-right" class="dpad-btn" data-key="ArrowRight">→</button>
+      <button id="btn-jump"  class="jump-btn" data-key="Space">↑</button>
+    </div>
+    <div id="ctrl-right">
+      <button id="btn-shoot" class="action-btn shoot-btn" data-key="KeyX">🔫</button>
+      <button id="btn-dash"  class="action-btn dash-btn"  data-key="ShiftLeft">💨</button>
+      <button id="btn-ex"    class="action-btn ex-btn"    data-key="KeyQ">EX</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="mobile.js"></script>
+  <script src="gamepad.js"></script>
+</body>
+</html>
